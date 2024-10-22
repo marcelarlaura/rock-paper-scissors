@@ -8,11 +8,13 @@
 </head>
 <body>
     <script>
-        let computerChoice;
-        let humanChoice;
-        let exit;
+        let userReply;
         let computerScore = 0;
         let humanScore = 0;
+        let roundCounter = 0;
+        let humanChoice;
+        let computerChoice;
+        let exit = 'no';
 
         function getComputerChoice(){
             let ranNum = Math.round(Math.random() * (9 - 1) + 1);
@@ -25,30 +27,60 @@
             }
         }
 
-        computerChoice = getComputerChoice();
-
         function getHumanChoice(){
-            humanChoice = prompt('Enter ONE of the following options: paper, scissors, or rock');
+            userReply = prompt('Enter ONE of the following options: paper, scissors, or rock');
             let tries = 0;
-            while (humanChoice.toLowerCase() != 'paper' && humanChoice.toLowerCase() != 'scissors' && humanChoice.toLowerCase() != 'rock' && tries < 5){
-                humanChoice = prompt('Invalid option. Enter ONE of the following options: paper, scissors, or rock'); 
+            while (userReply.toLowerCase() != 'paper' && userReply.toLowerCase() != 'scissors' && userReply.toLowerCase() != 'rock' && tries < 3){
+                userReply = prompt('Invalid option. Enter ONE of the following options: paper, scissors, or rock'); 
                 tries++; 
             }
-            if (tries >= 5){
+            if (tries >= 3){
+                exit = 'yes';
                 return false;
             } else {
-                return true;
+                return userReply.toLowerCase();
+            }
+        }
+
+        function playRound(arg1,arg2){
+            if (arg1 == 'scissors' && arg2 == 'paper'
+                || arg1 == 'paper' && arg2 == 'rock'
+                || arg1 == 'rock' && arg2 == 'scissors'){
+                humanScore++;
+                console.log(`Human selected ${arg1} and Computer selected ${arg2}. Human wins this round`);
+            } else if (arg2 == 'scissors' && arg1 == 'paper'
+                || arg2 == 'paper' && arg1 == 'rock'
+                || arg2 == 'rock' && arg1 == 'scissors'){
+                computerScore++;
+                console.log(`Human selected ${arg1} and Computer selected ${arg2}. Computer wins this round`);
+            } else {
+                console.log(`What a coincidence! Both Human and Computer picked ${arg2}. No winner in this round`);
             }
         }
         
-        exit = getHumanChoice();
-
-        function playRound(humanChoice,computerChoice){
-            
+        while (roundCounter <= 4 && exit == 'no'){
+            humanChoice = getHumanChoice();
+            computerChoice = getComputerChoice();
+            if (humanChoice != false){
+                console.log(`ROUND ${roundCounter+1}`);
+                playRound(humanChoice,computerChoice);
+                console.log('');
+                roundCounter++;
+            } else {
+                exit == 'yes';
+                console.log('You have exited the game succesfully');
+            }
         }
 
-        if (exit){
-            
+        if (roundCounter > 4 && exit == 'no'){
+            console.log(`FINAL SCORES: Human ${humanScore} vs Computer ${computerScore}`);
+            if (humanScore > computerScore){
+                console.log('Human has won the game. Yay!');
+            } else if (humanScore < computerScore){
+                console.log('Computer has won the game. Better luck next time!');
+            } else {
+                console.log('There was a tie. No winners');
+            }
         }
 
     </script>
