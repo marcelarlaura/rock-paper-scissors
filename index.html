@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAME: Rock, Paper, Scissors</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <script>
+        let computerChoice;
+        let humanChoice;
+        let exit;
+        let computerScore = 0;
+        let humanScore = 0;
+
+        function getComputerChoice(){
+            let ranNum = Math.round(Math.random() * (9 - 1) + 1);
+            if (ranNum <= 3){
+                return 'scissors';
+            } else if (ranNum <= 6){
+                return 'paper';
+            } else {
+                return 'rock';
+            }
+        }
+
+        computerChoice = getComputerChoice();
+
+        function getHumanChoice(){
+            humanChoice = prompt('Enter ONE of the following options: paper, scissors, or rock');
+            let tries = 0;
+            while (humanChoice.toLowerCase() != 'paper' && humanChoice.toLowerCase() != 'scissors' && humanChoice.toLowerCase() != 'rock' && tries < 5){
+                humanChoice = prompt('Invalid option. Enter ONE of the following options: paper, scissors, or rock'); 
+                tries++; 
+            }
+            if (tries >= 5){
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        exit = getHumanChoice();
+
+        function playRound(humanChoice,computerChoice){
+            
+        }
+
+        if (exit){
+            
+        }
+
+    </script>
+</body>
+</html>
