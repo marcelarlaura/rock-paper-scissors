@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAME: Rock, Paper, Scissors</title>
-    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
+    <div class="option">
+        <button id="paper">PAPER</button>
+        <button id="rock">ROCK</button>
+        <button id="scissors">SCISSORS</button>
+    </div>
+    <div id="message"></div>
+    <div id="score"></div>
+    <div id="winner"></div>
+    
     <script>
-        let userReply;
         let computerScore = 0;
         let humanScore = 0;
-        let roundCounter = 0;
-        let humanChoice;
         let computerChoice;
-        let exit = 'no';
+        const paper = document.querySelector("#paper");
+        const rock = document.querySelector("#rock");
+        const scissors = document.querySelector("#scissors");
+        const div = document.querySelector("#message");
+        const score = document.querySelector("#score");
+        const winner = document.querySelector("#winner");
+        div.textContent = 'Please press any of the options above to start a new game.';
+        
+        const humanScoreTable = document.createElement('div');
+        const computerScoreTable = document.createElement('div');
+
 
         function getComputerChoice(){
             let ranNum = Math.round(Math.random() * (9 - 1) + 1);
@@ -27,21 +42,7 @@
             }
         }
 
-        function getHumanChoice(){
-            userReply = prompt('Enter ONE of the following options: paper, scissors, or rock');
-            let tries = 0;
-            while (userReply.toLowerCase() != 'paper' && userReply.toLowerCase() != 'scissors' && userReply.toLowerCase() != 'rock' && tries < 3){
-                userReply = prompt('Invalid option. Enter ONE of the following options: paper, scissors, or rock'); 
-                tries++; 
-            }
-            if (tries >= 3){
-                exit = 'yes';
-                return false;
-            } else {
-                return userReply.toLowerCase();
-            }
-        }
-
+        
         function playRound(arg1,arg2){
             if (arg1 == 'scissors' && arg2 == 'paper'
                 || arg1 == 'paper' && arg2 == 'rock'
@@ -54,34 +55,55 @@
                 computerScore++;
                 console.log(`Human selected ${arg1} and Computer selected ${arg2}. Computer wins this round`);
             } else {
-                console.log(`What a coincidence! Both Human and Computer picked ${arg2}. No winner in this round`);
-            }
-        }
-        
-        while (roundCounter <= 4 && exit == 'no'){
-            humanChoice = getHumanChoice();
-            computerChoice = getComputerChoice();
-            if (humanChoice != false){
-                console.log(`ROUND ${roundCounter+1}`);
-                playRound(humanChoice,computerChoice);
-                console.log('');
-                roundCounter++;
-            } else {
-                exit == 'yes';
-                console.log('You have exited the game succesfully');
+                computerScore++;
+                humanScore++;
+                console.log(`What a coincidence! Both Human and Computer picked ${arg2}. Both are winners in this round`);
             }
         }
 
-        if (roundCounter > 4 && exit == 'no'){
-            console.log(`FINAL SCORES: Human ${humanScore} vs Computer ${computerScore}`);
-            if (humanScore > computerScore){
-                console.log('Human has won the game. Yay!');
-            } else if (humanScore < computerScore){
-                console.log('Computer has won the game. Better luck next time!');
-            } else {
-                console.log('There was a tie. No winners');
-            }
+        function finalRoundScore(humanChoice){
+            computerChoice = getComputerChoice();
+            div.textContent = '';
+            computerScoreTable.textContent= 'Computer score: ' + computerScore;
+            humanScoreTable.textContent = 'Human score: ' + humanScore;
+            score.append(computerScoreTable);
+            score.append(humanScoreTable);
+             if (computerScore <= 4 && humanScore <= 4){
+                playRound(humanChoice,computerChoice);
+                console.log(`Human has a score of ${humanScore}`);
+                console.log(`Computer has a score of ${computerScore}`);
+                console.log('');
+                div.textContent = 'Please press any of the options above to play another round.';
+             } else if (computerScore > 4 && humanScore <= 4){
+                console.log(`FINAL SCORES: HUMAN ${humanScore} vs COMPUTER ${computerScore}`);
+                console.log('Computer has won. Better luck next time!');
+                winner.textContent = 'Final winner: Computer';
+             } else if (computerScore <= 4 && humanScore > 4){
+                console.log(`FINAL SCORES: HUMAN ${humanScore} vs COMPUTER ${computerScore}`);
+                console.log('Human has won. Yay!');
+                winner.textContent = 'Final winner: Human';
+             } else {
+                console.log(`HUMAN AND COMPUTER HAD THE SAME FINAL SCORE OF ${humanScore}`);
+                console.log('There was no winner this time. Try playing again.');
+             }
         }
+        
+        paper.addEventListener("click", () => {
+            let humanChoice = 'paper';
+            finalRoundScore(humanChoice);
+        });
+
+        rock.addEventListener("click", () => {
+            let humanChoice = 'rock';
+            finalRoundScore(humanChoice);
+        });
+
+        scissors.addEventListener("click", () => {
+            let humanChoice = 'scissors';
+            finalRoundScore(humanChoice);
+        });
+
+        
 
     </script>
 </body>
